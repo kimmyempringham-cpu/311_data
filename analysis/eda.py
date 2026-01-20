@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import geopandas as gpd
+from pathlib import Path
 
 # STEP 1: READ IN DATASET FROM SQL (311 data + ACS + Weather)
 # connect to sql database
@@ -26,7 +27,14 @@ import geopandas as gpd
 
 # STEP 2: EXPLORATORY DATA ANALYSIS
 # Read in merged dataset (311 + ACS + Weather)
-df = pd.read_csv('/Users/kimmyempringham/Downloads/311/311_data_merged.csv')
+# use absolute path
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / "data" / "311_data_merged.csv"
+
+df = pd.read_csv(DATA_PATH)
+
+# original relative path
+#df = pd.read_csv('/Users/kimmyempringham/Downloads/311/311_data_merged.csv')
 
 
 # Feature engineering for EDA
@@ -144,7 +152,10 @@ plt.tight_layout()
 plt.show()
 
 # Plot 7: Spatial differences in response time by council district
-districts = gpd.read_file('/Users/kimmyempringham/Downloads/Council_District.geojson').to_crs("EPSG:4326")
+GEOJSON_PATH = BASE_DIR / "data" / "Council_District.geojson"
+
+districts = gpd.read_file(GEOJSON_PATH).to_crs("EPSG:4326")
+#districts = gpd.read_file('/Users/kimmyempringham/Downloads/Council_District.geojson').to_crs("EPSG:4326")
 
 points = gpd.GeoDataFrame(
     df.dropna(subset=['Latitude', 'Longitude']).copy(),  # avoid invalid geometries
