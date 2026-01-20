@@ -51,17 +51,22 @@ top_10_types = df['Service Type'].value_counts().head(10).index
 df_top_10 = df[df['Service Type'].isin(top_10_types)].copy()  # .copy() avoids SettingWithCopy warnings
 
 
-# Plot 1: Median resolution time by service type (top 10)
-median_hours = df_top_10.groupby('Service Type')['resolution_hours'].median().sort_values()
+# Plot 1: Median resolution time by service type (top 10 with valid medians)
+median_hours = (
+    df_top_10
+    .groupby("Service Type")["resolution_hours"]
+    .median()
+    .loc[lambda x: x > 0.1]   # exclude near-instant resolutions
+    .sort_values()
+)
 
 plt.figure(figsize=(20, 6))
-median_hours.plot(kind='barh')
-plt.title('Median Hours by Request Type (Top 10)')
-plt.xlabel('Median Hours')
-plt.ylabel('Request Type')
+plt.barh(median_hours.index, median_hours.values)
+plt.title("Median Resolution Time by Service Request Category (Top Request Types)")
+plt.xlabel("Median Hours")
+plt.ylabel("Request Type")
 plt.tight_layout()
 plt.show()
-
 
 # Plot 2: Percent completed within 72 hours (top 10)
 perc_within_72 = df_top_10.groupby('Service Type')['under_72'].mean() * 100
@@ -240,3 +245,4 @@ plt.ylabel('Resolution Hours')
 plt.grid(True, axis='y', linestyle='--', alpha=0.5)
 plt.tight_layout()
 plt.show()
+
