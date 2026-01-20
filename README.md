@@ -78,6 +78,7 @@ In a municipal setting, this framework could be used to:
 
 ```text
 .
+.
 ├── analysis/
 │   ├── eda_charts/          # Exploratory analysis visualizations
 │   ├── modeling_charts/     # Model evaluation plots
@@ -94,10 +95,10 @@ In a municipal setting, this framework could be used to:
 │   ├── resolution_hours.py  # Service request resolution time calculation
 │   └── zcta.py               # Geographic assignment to ZCTAs
 │
-├── .idea/                    # IDE configuration (not required for analysis)
+├── .gitignore               # Ignored files and directories
 └── README.md
- ```
 
+ ```
 ---
 
 ## Full Report
